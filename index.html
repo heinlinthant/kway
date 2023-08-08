@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>ခွေ ဂဏန်း စစ်မယ်</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-sm-12">
+                <div class="input-group mb-3">
+                    <input type="text" id="userInput" class="form-control" placeholder="ခွေဂဏန်းထည့်ပါ။">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" onclick="generateCombinations()">တွက်မယ်</button>
+                    </div>
+                </div>
+                <p id="result" class="mt-3"></p>
+                <p id="total" class="mt-3"></p>
+                
+                <div id="inputGroup2" style="display: none;">
+                    <div class="input-group mb-3">
+                        <input type="text" id="userInput2" class="form-control" placeholder="စစ်ချင်တဲ့ဂဏန်းထည့်ပါ။">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" onclick="updateResult()">ပါလားစစ်မယ်</button>
+                        </div>
+                    </div>
+                    <div id="result2" class="mt-3"></div>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="reverseCheckbox">
+                    <label class="form-check-label" for="reverseCheckbox">
+                        ခွေပူး
+                    </label>
+                </div>
+                
+                <button class="btn btn-danger" onclick="resetResults()">ထပ်စစ်မယ်</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let originalResult = "";
+
+        function generateCombinations() {
+            const userInput = document.getElementById("userInput").value;
+            const reverseCheckbox = document.getElementById("reverseCheckbox").checked;
+            const combinations = [];
+
+            for (let i = 0; i < userInput.length; i++) {
+                for (let j = i + 1; j < userInput.length; j++) {
+                    combinations.push(userInput[i] + userInput[j]);
+                }
+            }
+            
+            if (reverseCheckbox) {
+                for (let i = userInput.length - 1; i >= 0; i--) {
+                    for (let j = i - 1; j >= 0; j--) {
+                        combinations.push(userInput[i] + userInput[j]);
+                    }
+                }
+            }
+
+            originalResult = combinations.join(", ");
+            document.getElementById("result").textContent = originalResult;
+            document.getElementById("total").textContent = `စုစုပေါင်း: ${combinations.length} ကွက်`;
+            
+            // Show the second input and button
+            document.getElementById("inputGroup2").style.display = "block";
+        }
+
+        function updateResult() {
+            const userInput2 = document.getElementById("userInput2").value;
+
+            if (originalResult.includes(userInput2)) {
+                document.getElementById("result2").innerHTML = `
+                    <h3 class="text-info">${userInput2} ပေါက်ပါတယ်</h3>
+                `;
+            } else {
+                document.getElementById("result2").innerHTML = `
+                    <h3 class="text-warning">မပေါက်ပါ</h3>
+                `;
+            }
+        }
+        
+        function resetResults() {
+            document.getElementById("userInput").value = "";
+            document.getElementById("userInput2").value = "";
+            document.getElementById("result").textContent = "";
+            document.getElementById("result2").textContent = "";
+            document.getElementById("total").textContent = "";
+            document.getElementById("inputGroup2").style.display = "none";
+            document.getElementById("reverseCheckbox").checked = false;
+        }
+    </script>
+</body>
+</html>
